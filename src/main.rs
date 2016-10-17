@@ -9,6 +9,8 @@ fn main() {
         nickname: Some(format!("the-new-rbot")),
         server: Some(format!("irc.freenode.org")),
         channels: Some(vec![format!("#ayyylmao")]),
+        use_ssl: Some(true),
+        port: Some(6697),
         .. Default::default()
     };
     let server = IrcServer::from_config(cfg).unwrap();
