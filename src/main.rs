@@ -20,8 +20,23 @@ fn main() {
         if message.is_ok() {
             let msg = &message.unwrap();
             let user = msg.source_nickname().unwrap_or("");
-            if let PRIVMSG(ref chan, ref cmd) = msg.command {
-                println!("{}: {}: {}", chan, user, cmd);
+            if let PRIVMSG(ref chan, ref user_msg) = msg.command {
+                println!("{}: {}: {}", chan, user, user_msg);
+
+                // Check if first character of the message is the bot character
+                if user_msg.as_bytes()[0] == b'!' {
+                    let argv: Vec<&str> = user_msg.split_whitespace().collect();
+                    let cmd: &str = argv[0];
+
+                    println!("Command: {}", cmd);
+                    match cmd {
+                        "!test" => println!("You have done the needful."),
+                        "!echo" => {
+                            server.send_privmsg(chan, &argv.join(" "));
+                        },
+                        _ => println!("Invalid command!"),
+                    }
+                }
             }
         }
     }
